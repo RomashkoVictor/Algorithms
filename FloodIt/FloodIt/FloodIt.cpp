@@ -1,12 +1,22 @@
 #include<fstream>
 #include<iostream>
 #include<ctime>
+#include<list>
 using namespace std;
 #pragma warning(disable:4996)
 
+struct Element
+{
+	bool mark;
+	int colour;
+	int i;
+	int j;
+};
+
 int n,m,k,l;
-int **array;
-bool **mark;
+Element *array;
+
+
 
 void input(char fileName[])
 {
@@ -19,18 +29,20 @@ void input(char fileName[])
 		exit(1);
 	}
 	fscanf(file,"%d%d%d%d",&n,&m,&k,&l);
-	array = new int* [n];
-	mark = new bool* [n];
+	array = new Element [n*m];
+	int temp;
 	for (int i = 0; i < n; i++)
 	{
-		array[i] = new int [m];
-		mark[i] = new bool [m];
 		for (int j = 0; j < m; j++)
 		{
-			fscanf(file,"%d",&array[i][j]);
-			mark[i][j]=false;
+			fscanf(file,"%d",&temp);
+			array[i*n+j].colour=temp;
+			array[i*n+j].mark=false;
+			array[i*n+j].i=i;
+			array[i*n+j].j=j;
 		}
 	}
+	fclose(file);
 }
 void output(char fileName[])
 {
@@ -45,15 +57,13 @@ void output(char fileName[])
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)
-			fscanf(file,"%d",&array[i][j]);
+		{
+			fprintf(file,"%d ",array[i*n+j].colour);
+		}
+		fprintf(file,"\n");
 	}
-	for (int i = 0; i < n; i++)
-	{
-		delete array[i];
-		delete mark[i];
-	}
+	fclose(file);
 	delete array;
-	delete mark;
 }
 int main()
 {
