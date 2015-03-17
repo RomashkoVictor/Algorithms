@@ -2,7 +2,8 @@
 #include<fstream>
 #include<iostream>
 #include<ctime>
-#include<list>
+#include<set>
+#include<vector>
 using namespace std;
 
 struct Element
@@ -11,15 +12,27 @@ struct Element
 	int i;
 	int j;
 	bool inBorder;
-	bool operator < (Element &obj)
+	bool operator < (const Element &obj)const
 	{
 		return colour<obj.colour;
+	}
+	bool operator >(const Element &obj)const
+	{
+		return colour>obj.colour;
+	}
+	bool operator ==(const Element &obj)const
+	{
+		return colour == obj.colour;
+	}
+	bool operator !=(const Element &obj)const
+	{
+		return colour != obj.colour;
 	}
 };
 
 int n,m,k,l;
 Element **array;
-list<Element> border;
+multiset<Element> border;
 int *colours;
 
 void input(char fileName[])
@@ -36,7 +49,7 @@ void input(char fileName[])
 	colours = new int [l];
 	array = new Element* [n+2];
 	for (int i = 0; i < n+2; i++)
-	array[i] = new Element[m+2];
+		array[i] = new Element[m+2];
 	for (int i = 1; i < n+1; i++)
 	{
 		for (int j = 1; j < m+1; j++)
@@ -109,7 +122,7 @@ void addElementToBorder(Element& obj, int colour)
 		if ( (array[obj.i][obj.j-1].colour != -1) && (!array[obj.i][obj.j-1].inBorder) )
 		{
 			array[obj.i][obj.j-1].inBorder = true;
-			border.push_back(array[obj.i][obj.j-1]);
+			border.insert(array[obj.i][obj.j-1]);
 		}
 	}
 	if (array[obj.i][obj.j+1].colour == colour)
@@ -119,7 +132,7 @@ void addElementToBorder(Element& obj, int colour)
 		if ( (array[obj.i][obj.j+1].colour != -1) && (!array[obj.i][obj.j+1].inBorder) )
 		{
 			array[obj.i][obj.j+1].inBorder = true;
-			border.push_back(array[obj.i][obj.j+1]);
+			border.insert(array[obj.i][obj.j+1]);
 		}
 	}
 	if (array[obj.i-1][obj.j].colour == colour)
@@ -129,7 +142,7 @@ void addElementToBorder(Element& obj, int colour)
 		if ( (array[obj.i-1][obj.j].colour != -1) && (!array[obj.i-1][obj.j].inBorder) )
 		{
 			array[obj.i-1][obj.j].inBorder = true;
-			border.push_back(array[obj.i-1][obj.j]);
+			border.insert(array[obj.i-1][obj.j]);
 		}
 	}
 	if (array[obj.i+1][obj.j].colour == colour)
@@ -139,59 +152,35 @@ void addElementToBorder(Element& obj, int colour)
 		if ( (array[obj.i+1][obj.j].colour != -1) && (!array[obj.i+1][obj.j].inBorder) )
 		{
 			array[obj.i+1][obj.j].inBorder = true;
-			border.push_back(array[obj.i+1][obj.j]);
+			border.insert(array[obj.i+1][obj.j]);
 		}
 	}
 }
 void algorithm()
 {
 	array[1][1].colour=-1;
-	border.push_back(array[1][2]);
-	border.push_back(array[2][1]);
+	border.insert(array[1][2]);
+	border.insert(array[2][1]);
 	array[1][2].inBorder = true;
 	array[2][1].inBorder = true;
+	Element temp;
+	vector<Element> currentEl;
 	for (int j = 0; j < l; j++)
 	{
-		for (list<Element>::iterator i = border.begin(); i != border.end();)
+		temp.colour = colours[j];
+		multiset<Element>::iterator it= border.lower_bound(temp);
+		if(it != border.end())
 		{
-			if ((*i).colour == colours[j])
+			for (;(it != border.end()) && ((*it).colour == colours[j]); it++)
 			{
-				addElementToBorder(*i, colours[j]);
-				list<Element>::iterator temp=i;
-				(*i).inBorder = false;
-				if(temp != border.begin())
-				{
-					temp--;
-					border.erase(i);
-					i=temp;
-				}
-				else
-				{
-					border.erase(i);
-					i=border.begin();
-				}
+				currentEl.push_back(*it);
 			}
-			else
+			border.erase(temp);
+			for (int i = 0; i < currentEl.size(); i++)
 			{
-				if((*i).colour == -1)
-				{
-					list<Element>::iterator temp=i;
-					(*i).inBorder = false;
-					if(temp != border.begin())
-					{
-						temp--;
-						border.erase(i);
-						i=temp;
-					}
-					else
-					{
-						border.erase(i);
-						i=border.begin();
-					}
-				}
-				else
-					i++;
+				addElementToBorder(currentEl[i],colours[j]);
 			}
+			currentEl.clear();
 		}
 	}
 }
