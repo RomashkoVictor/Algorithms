@@ -3,6 +3,18 @@
 *.lo
 *.o
 *.obj
+*.sdf
+*.sln
+*.suo
+*.pdb
+*.ilk
+*.vcxproj
+*.filters
+*.tlog
+*.log
+*.lastbuildstate
+*.idb
+*.user
 
 # Precompiled Headers
 *.gch
@@ -23,6 +35,4 @@
 *.lib
 
 # Executables
-*.exe
-*.out
 *.app
