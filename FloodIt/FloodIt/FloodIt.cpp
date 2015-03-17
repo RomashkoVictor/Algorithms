@@ -26,7 +26,10 @@ void input(char fileName[])
 		array[i] = new int [m];
 		mark[i] = new bool [m];
 		for (int j = 0; j < m; j++)
+		{
 			fscanf(file,"%d",&array[i][j]);
+			mark[i][j]=false;
+		}
 	}
 }
 void output(char fileName[])

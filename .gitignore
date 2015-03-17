@@ -15,6 +15,7 @@
 *.lastbuildstate
 *.idb
 *.user
+*.opensdf
 
 # Precompiled Headers
 *.gch
