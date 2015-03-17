@@ -16,6 +16,7 @@
 *.idb
 *.user
 *.opensdf
+*.unsuccessfulbuild
 
 # Precompiled Headers
 *.gch
