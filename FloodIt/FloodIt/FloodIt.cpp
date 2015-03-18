@@ -4,6 +4,7 @@
 #include<ctime>
 #include<set>
 #include<vector>
+#pragma comment(linker, "/STACK:64777216")
 using namespace std;
 
 struct Element
@@ -46,7 +47,7 @@ void input(char fileName[])
 		exit(1);
 	}
 	fscanf(file,"%d%d%d%d",&n,&m,&k,&l);
-	colours = new int [l];
+	colours = new int [l+1];
 	array = new Element* [n+2];
 	for (int i = 0; i < n+2; i++)
 		array[i] = new Element[m+2];
@@ -60,8 +61,9 @@ void input(char fileName[])
 			array[i][j].inBorder = false;
 		}
 	}
-	for (int j = 0; j < l; j++)
+	for (int j = 1; j < l+1; j++)
 		fscanf(file,"%d",&colours[j]);
+	colours[0]=array[1][1].colour;
 	for (int i = 0; i < n+2; i++)
 	{
 		array[i][0].colour = array[i][m+1].colour = -1;
@@ -97,7 +99,7 @@ void output(char fileName[])
 		for (int j = 1; j < m+1; j++)
 		{
 			if(array[i][j].colour == -1)
-				fprintf(file,"%d ",colours[l-1]);
+				fprintf(file,"%d ",colours[l]);
 			else
 				fprintf(file,"%d ",array[i][j].colour);
 		}
@@ -165,7 +167,7 @@ void algorithm()
 	array[2][1].inBorder = true;
 	Element temp;
 	vector<Element> currentEl;
-	for (int j = 0; j < l; j++)
+	for (int j = 0; j < l+1; j++)
 	{
 		temp.colour = colours[j];
 		multiset<Element>::iterator it= border.lower_bound(temp);
