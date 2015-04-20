@@ -67,7 +67,7 @@ void dijkstra(int start, int end1, int end2)
 {
 	int currentCity = start;
 	cost[currentCity] = 0;
-	while( ( (way[0] == -1) || (way[1] == -1) ) && (currentCity > -1) )
+	while( ( (way[0] < 0) || (way[1] < 0) ) && (currentCity > -1) )
 	{
 		for (int i = 0; i < numIslands; i++)
 		{
@@ -99,7 +99,7 @@ void dijkstra(int start, int end1)
 {
 	int currentCity = start;
 	cost[currentCity] = 0;
-	while( (way[2] == -1) && (currentCity > -1) )
+	while( (way[2] < 0) && (currentCity > -1) )
 	{
 		for (int i = 0; i < numIslands; i++)
 		{
